@@ -1,0 +1,59 @@
+<%-include("header")-%>
+<div class="box" id="heading">
+  <h1>Bill Splitting</h1>
+</div>
+<div class="box">
+  <form action="/bill-splitting" method="get">
+    <label>Select Category:</label>
+    <select name="category" onchange="this.form.submit()">
+      <option value="">Select Category</option>
+      <%categories.forEach(function(category) {%>
+        <option value="<%=category.name%>" <%=selectedCategory === category.name ? "selected":"" %>><%=category.name%></option>
+      <%})%>
+    </select>
+  </form>
+  <%if(selectedCategory){%>
+    <form action="/bill-splitting" method="get">
+      <input type="hidden" name="category" value="<%=selectedCategory%>">
+      <label>Select Expense:</label>
+      <select name="expenseId" onchange="this.form.submit()">
+        <option value="">Select Expense</option>
+        <%expenses.forEach(function(expense) {%>
+          <option value="<%=expense._id%>" <%=selectedExpense._id.equals(expense._id) ? "selected":""%>><%=expense.name%> - $<%=expense.price.toFixed(2)%></option>
+        <%})%>
+      </select>
+    </form>
+  <%}%>
+  <%if(selectedExpense){%>
+    <div>
+      <h2><%=selectedExpense.name%> - $<%=selectedExpense.price.toFixed(2)%></h2>
+      <form action="/add-user" method="post">
+        <input type="hidden" name="expenseId" value="<%=selectedExpense._id%>">
+        <input type="hidden" name="category" value="<%=selectedCategory%>">
+        <input type="text" name="userName" placeholder="User Name">
+        <input type="number" name="amount" placeholder="Amount">
+        <button type="submit">Add User</button>
+      </form>
+      <form action="/save-split" method="post">
+        <input type="hidden" name="expenseId" value="<%=selectedExpense._id%>">
+        <input type="hidden" name="category" value="<%=selectedCategory%>">
+        <ul>
+          <%selectedExpense.users.forEach(function(user, index) {%>
+            <li>
+              <input type="text" name="users[<%=index%>][name]" value="<%=user.name%>">
+              <input type="number" name="users[<%=index%>][amount]" value="<%=user.amount.toFixed(2)%>">
+              <form action="/remove-user" method="post">
+                <input type="hidden" name="expenseId" value="<%=selectedExpense._id%>">
+                <input type="hidden" name="category" value="<%=selectedCategory%>">
+                <input type="hidden" name="userId" value="<%=user._id%>">
+                <button type="submit">Remove</button>
+              </form>
+            </li>
+          <%})%>
+        </ul>
+        <button type="submit">Save Split</button>
+      </form>
+    </div>
+  <%}%>
+</div>
+<%-include("footer")-%>

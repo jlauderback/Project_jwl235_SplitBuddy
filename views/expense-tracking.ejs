@@ -1,0 +1,32 @@
+<%- include("header")-%>
+  <div class="box" id="heading">
+    <h1>Expense Tracking</h1>
+  </div>
+  <div class="box">
+    <form action="/expense-tracking" method="get">
+      <label>Select Category:</label>
+      <select name="category" onchange="this.form.submit()">
+        <option value="Food" <%=category === "Food" ? "selected":""%>>Food</option>
+        <option value="Travel" <%=category === "Travel" ? "selected":""%>>Travel</option>
+        <option value="Other" <%=category === "Other" ? "selected":""%>>Other</option>
+      </select>
+    </form>
+    <%newListItems.forEach(function(item){%>
+      <div class="item">
+        <p><%=item.name%></p>
+        <p><%=item.price%></p>
+        <form action="/delete-expense" method="post">
+          <input type="hidden" name="itemId" value="<%=item._id%>">
+          <input type="hidden" name="newCategory" value="<%=category%>">
+          <button type=submit">Delete</button>
+        </form>
+      </div>
+    <%})%>
+    <form class="item" action="/expense-tracking" method="post">
+      <input type="text" name="newItem" placeholder="Expense" autocomplete="off">
+      <input type="text" name="newPrice" placeholder="Price" autocomplete="off">
+      <input type="hidden" name="newCategory" value="<%=category%>">
+      <button type="submit" name="list" value="<%=listTitle%>">+</button>
+    </form>
+  </div>
+<%- include("footer")-%>
