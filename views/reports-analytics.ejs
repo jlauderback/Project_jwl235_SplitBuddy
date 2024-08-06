@@ -1,0 +1,32 @@
+<%- include("header")-%>
+<div class="box" id="heading">
+  <h1>Reports & Analytics</h1>
+</div>
+<div class="box">
+  <form action="/" method="get">
+    <button type="submit">Home</button>
+  </form>
+  <form action="/reports-analytics" method="get">
+    <label>Select User:</label>
+    <select name="userName" onchange="this.form.submit()">
+      <option value="">Select User</option>
+      <%users.forEach(function(user){%>
+        <option value="<%=user%>" <%=selectedUser === user ? "selected":""%>><%=user%></option>
+      <%})%>
+    </select>
+  </form>
+  <%if(selectedUser){%>
+    <h2>Expenses for <%=selectedUser%></h2>
+    <ul>
+      <%userExpenses.forEach(function(expense){%>
+        <li>
+          <strong>Category:</strong> <%=expense.category%><br>
+          <strong>Expense:</strong> <%=expense.expenseName%><br>
+          <strong>Amount Owed:</strong> $<%=expense.amount.toFixed(2)%>
+        </li>
+      <%})%>
+    </ul>
+    <h3>Total Amount Owed: $<%=totalAmount.toFixed(2)%></h3>
+  <%}%>
+</div>
+<%- include("footer")-%>

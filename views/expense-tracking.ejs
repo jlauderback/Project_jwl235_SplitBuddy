@@ -3,6 +3,9 @@
     <h1>Expense Tracking</h1>
   </div>
   <div class="box">
+    <form action="/" method="get">
+      <button type="submit">Home</button>
+    </form>
     <form action="/expense-tracking" method="get">
       <label>Select Category:</label>
       <select name="category" onchange="this.form.submit()">
@@ -13,8 +16,8 @@
     </form>
     <%newListItems.forEach(function(item){%>
       <div class="item">
-        <p><%=item.name%></p>
-        <p><%=item.price%></p>
+        <p><%=item.expenseName%></p>
+        <p><%=item.amount%></p>
         <form action="/delete-expense" method="post">
           <input type="hidden" name="itemId" value="<%=item._id%>">
           <input type="hidden" name="newCategory" value="<%=category%>">
